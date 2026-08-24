@@ -9,7 +9,7 @@ import * as THREE from 'three';
 
 import Nebula from './Nebula';
 import Starfield from './Starfield';
-import ParticleLogo from './ParticleLogo';
+import QuantumWeb from './QuantumWeb';
 import InfinityStones from './InfinityStones';
 import EnergyField from './EnergyField';
 import CameraRig from './CameraRig';
@@ -121,7 +121,7 @@ export default function SceneRoot() {
           <Nebula />
           <Starfield count={Math.round(q.starCount * factor)} />
           <EnergyField count={Math.round(q.fieldParticles * factor)} />
-          <ParticleLogo count={Math.round(q.logoParticles * factor)} />
+          <QuantumWeb nodes={q.webNodes} />
           <InfinityStones />
         </Suspense>
 

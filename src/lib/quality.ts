@@ -15,7 +15,8 @@ export type QualitySettings = {
   dpr: [number, number];
   /** Particle counts are the single biggest lever on GPU cost. */
   starCount: number;
-  logoParticles: number;
+  /** Nodes in the hero quantum web. */
+  webNodes: number;
   fieldParticles: number;
   bloom: boolean;
   chromaticAberration: boolean;
@@ -51,7 +52,7 @@ export function getQuality(): QualitySettings {
     low: {
       dpr: [1, 1.25],
       starCount: 1800,
-      logoParticles: 6000,
+      webNodes: 120,
       fieldParticles: 900,
       bloom: false,
       chromaticAberration: false,
@@ -60,7 +61,7 @@ export function getQuality(): QualitySettings {
     medium: {
       dpr: [1, 1.6],
       starCount: 4500,
-      logoParticles: 18000,
+      webNodes: 200,
       fieldParticles: 2200,
       bloom: true,
       chromaticAberration: false,
@@ -69,7 +70,7 @@ export function getQuality(): QualitySettings {
     high: {
       dpr: [1, 2],
       starCount: 9000,
-      logoParticles: 42000,
+      webNodes: 260,
       fieldParticles: 4500,
       bloom: true,
       chromaticAberration: true,

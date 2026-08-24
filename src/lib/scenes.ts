@@ -19,6 +19,10 @@ export type SceneMood = {
   bloom: number;
   /** Camera dolly z offset. */
   dolly: number;
+  /** Starfield opacity multiplier. The hero is a dark web, not a space scene. */
+  stars: number;
+  /** Base void colour behind the nebula. */
+  voidColor: THREE.Color;
 };
 
 const mood = (
@@ -28,6 +32,8 @@ const mood = (
   drift: number,
   bloom: number,
   dolly: number,
+  stars = 1,
+  voidHex = '#050816',
 ): SceneMood => ({
   colorA: new THREE.Color(a),
   colorB: new THREE.Color(b),
@@ -35,12 +41,13 @@ const mood = (
   drift,
   bloom,
   dolly,
+  stars,
+  voidColor: new THREE.Color(voidHex),
 });
 
 export const SCENE_MOODS: Record<SceneId, SceneMood> = {
-  // Colour only — density, drift, bloom and dolly are untouched.
-  //                    primary    secondary  dens  drift bloom dolly
-  hero:                mood('#1b4fd8', '#7a3cff', 0.85, 1.0, 1.15, 0),
+  //                    primary    secondary  dens  drift bloom dolly stars
+  hero:                mood('#160309', '#24060f', 0.06, 0.25, 0.55, 0, 0.12, '#060406'),
   galaxy:              mood('#2a6cff', '#c04dff', 0.70, 0.7, 1.00, -1.5),
   'brand-new-circuit': mood('#1f6dff', '#35d0ff', 0.42, 0.35, 0.85, -2.5),
   'daily-bugle':       mood('#c8102e', '#e8e2d4', 0.30, 0.30, 0.70, -2.0),

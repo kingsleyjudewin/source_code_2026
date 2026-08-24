@@ -33,6 +33,7 @@ const frag = /* glsl */ `
   uniform vec3  uColorB;
   uniform float uDensity;
   uniform float uVelocity;
+  uniform vec3  uVoid;
 
   // -- value noise + fbm ---------------------------------------------------
   vec2 hash(vec2 p) {
@@ -83,7 +84,7 @@ const frag = /* glsl */ `
     cloud *= uDensity;
 
     // Colour ramp: deep void -> primary -> secondary at the bright cores.
-    vec3 col = vec3(0.019, 0.031, 0.086);                    // #050816
+    vec3 col = uVoid;                                        // per-scene base
     col = mix(col, uColorA, clamp(cloud * 0.85, 0.0, 1.0));
     col = mix(col, uColorB, clamp(pow(cloud, 2.4) * 1.15, 0.0, 1.0));
 
@@ -133,6 +134,7 @@ export default function Nebula() {
           uColorB: { value: new THREE.Color('#7a3cff') },
           uDensity: { value: 0.85 },
           uVelocity: { value: 0 },
+          uVoid: { value: new THREE.Color('#050816') },
         },
         depthTest: false,
         depthWrite: false,
@@ -163,6 +165,7 @@ export default function Nebula() {
     const k = 1 - Math.exp(-1.8 * delta);
     u.uColorA.value.lerp(target.colorA, k);
     u.uColorB.value.lerp(target.colorB, k);
+    (u.uVoid.value as THREE.Color).lerp(target.voidColor, k);
     u.uDensity.value += (target.density - u.uDensity.value) * k;
     u.uVelocity.value += (velocity - u.uVelocity.value) * (1 - Math.exp(-6 * delta));
   });

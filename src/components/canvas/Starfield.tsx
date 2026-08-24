@@ -24,6 +24,7 @@ const vert = /* glsl */ `
   uniform float uTravel;
   uniform float uVelocity;
   uniform float uPixelRatio;
+  uniform float uStars;
 
   varying float vFade;
   varying vec3  vTint;
@@ -45,7 +46,7 @@ const vert = /* glsl */ `
 
     float dist = -mv.z;
     // Fade in from the far plane and out as they pass the camera.
-    vFade = smoothstep(130.0, 60.0, dist) * smoothstep(0.5, 8.0, dist);
+    vFade = smoothstep(130.0, 60.0, dist) * smoothstep(0.5, 8.0, dist) * uStars;
 
     vTwinkle = 0.55 + 0.45 * sin(uTime * (1.2 + aSeed * 2.5) + aSeed * 24.0);
     vTint = aTint;
@@ -135,6 +136,7 @@ export default function Starfield({ count = 6000 }: { count?: number }) {
         uTravel: { value: 0 },
         uVelocity: { value: 0 },
         uPixelRatio: { value: 1 },
+        uStars: { value: 1 },
       },
       transparent: true,
       depthWrite: false,
@@ -167,6 +169,7 @@ export default function Starfield({ count = 6000 }: { count?: number }) {
 
     const k = 1 - Math.exp(-7 * delta);
     uniforms.uVelocity.value += (velocity - uniforms.uVelocity.value) * k;
+    uniforms.uStars.value += (mood.stars - uniforms.uStars.value) * (1 - Math.exp(-2 * delta));
   });
 
   return <points geometry={geometry} material={material} frustumCulled={false} />;
