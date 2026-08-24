@@ -98,7 +98,10 @@ export const EVENTS: SourceEvent[] = [
     venue: 'Room 241, 2nd Floor, 2nd Block',
     category: 'Technical Event',
     teamSize: '1–4 Members',
-    coordinators: [{ name: 'Lourds Xavier', phone: '8095765526' }],
+    coordinators: [
+      { name: 'Lourds Xavier', phone: '8095765526' },
+      { name: 'Jayani', phone: '8148311354' },
+    ],
     registerUrl: REGISTER_URL,
     universe: 'stark-lab',
     accent: '#4cc9ff',
