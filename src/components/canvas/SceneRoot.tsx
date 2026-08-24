@@ -18,7 +18,7 @@ import { scrollStore } from '@/lib/scroll';
 import { SCENE_MOODS } from '@/lib/scenes';
 
 /** Bloom strength follows the active scene's mood. */
-function MoodBloom({ base }: { base: number }) {
+function MoodBloom({ base, levels }: { base: number; levels: number }) {
   const [intensity, setIntensity] = useState(base);
 
   useEffect(() => {
@@ -45,6 +45,7 @@ function MoodBloom({ base }: { base: number }) {
       luminanceSmoothing={0.7}
       mipmapBlur
       radius={0.72}
+      levels={levels}
     />
   );
 }
@@ -53,7 +54,7 @@ function Effects({ q }: { q: QualitySettings }) {
   if (!q.bloom) return null;
   return (
     <EffectComposer multisampling={0} enableNormalPass={false}>
-      <MoodBloom base={1.15} />
+      <MoodBloom base={1.15} levels={q.bloomLevels} />
       {q.chromaticAberration ? (
         <ChromaticAberration
           offset={new THREE.Vector2(0.0006, 0.0009)}

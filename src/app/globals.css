@@ -2149,3 +2149,53 @@ html.intro-active body {
   .scope-wave, .gate, .pcb { animation: none; }
   .btn-pulse, .btn-ripple { animation: none; opacity: 0; }
 }
+
+/* ============================================================================
+   MOBILE COST REDUCTIONS
+   Appearance is deliberately preserved — these cut per-frame work, not visuals.
+   Desktop never matches these queries, so it is untouched.
+   ========================================================================= */
+@media (max-width: 767px), (pointer: coarse) {
+  /* The rotating rim is a conic-gradient composited through a mask. Animating
+     it repaints that gradient every frame, on every glass surface on screen —
+     one of the heaviest things on the page for a phone GPU. Frozen at an angle
+     that keeps the highlight visible, the rim still reads the same in motion. */
+  .glass-rim::before {
+    animation: none;
+    --rim-angle: 235deg;
+  }
+
+  /* Each backdrop-filter is a separate blur of everything behind it. 12px is
+     visually near-identical to 20px at phone viewing distance and samples a
+     far smaller kernel. */
+  .glass {
+    backdrop-filter: blur(12px) saturate(135%);
+    -webkit-backdrop-filter: blur(12px) saturate(135%);
+  }
+
+  /* Binary rain is positioned by index across the full width, so thinning it
+     has to preserve the spread — dropping every other column keeps an even
+     distribution. At 390px wide, 13 columns is still denser than desktop's 26
+     across 1600px, so this reads identically while halving the animated nodes. */
+  .binary-column:nth-child(even) {
+    display: none;
+  }
+
+  /* Same reasoning for the hero's foreground sparks. */
+  .hero-sparks span:nth-child(even) {
+    display: none;
+  }
+
+  /* Poster parallax planes are pointer-driven and pointer parallax is disabled
+     on touch, so the extra compositor layers earn nothing here. */
+  .poster-base,
+  .poster-fg {
+    will-change: auto;
+  }
+
+  /* The reflection is a second, blurred copy of the poster composited under
+     every card — pure cost on a screen where it is barely visible. */
+  .poster-reflection {
+    display: none;
+  }
+}
