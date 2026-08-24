@@ -1,0 +1,1890 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+   SOURCE CODE 2026 — design tokens
+   Nothing here is a flat colour. Every surface is a gradient, every accent
+   carries a glow pair (core + halo) so bloom has something to bite on.
+   ========================================================================= */
+@theme {
+  /* -- voids ------------------------------------------------------------- */
+  --color-void-900: #050816;
+  --color-void-800: #070b1a;
+  --color-void-700: #0a1022;
+  --color-void-600: #0e1630;
+  --color-void-500: #141d3f;
+
+  /* -- accents ----------------------------------------------------------- */
+  --color-arc: #4cc9ff;          /* arc reactor blue   */
+  --color-arc-deep: #0a84c9;
+  --color-infinity: #a06bff;     /* infinity purple    */
+  --color-infinity-deep: #6a2fd6;
+  --color-stark: #ffc44d;        /* stark gold         */
+  --color-stark-deep: #d98b12;
+  --color-quantum: #35f0d4;      /* quantum cyan       */
+  --color-cosmic: #ff5ec4;       /* cosmic violet      */
+  --color-repulsor: #ff4d4d;     /* repulsor red       */
+
+  /* -- neutrals ---------------------------------------------------------- */
+  --color-silver: #c8d4e6;
+  --color-holo: #f2f7ff;
+  --color-muted: #7d8db0;
+
+  /* -- type -------------------------------------------------------------- */
+  --font-display: var(--font-orbitron), 'Eurostile', 'Rajdhani', system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains), 'SFMono-Regular', ui-monospace, monospace;
+
+  /* -- motion ------------------------------------------------------------ */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-power: cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   Base
+   ========================================================================= */
+:root {
+  --section-accent: var(--color-arc);
+  --section-accent-deep: var(--color-arc-deep);
+  color-scheme: dark;
+}
+
+* { min-width: 0; }
+
+html {
+  background: var(--color-void-900);
+  /* Lenis drives scrolling; native smooth would fight it. */
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-void-900);
+  color: var(--color-silver);
+  font-family: var(--font-body);
+  font-feature-settings: 'ss01', 'cv01';
+  overflow-x: clip;
+  /* The global WebGL canvas sits at z-0; all DOM content rides above it. */
+  position: relative;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--section-accent) 40%, transparent);
+  color: var(--color-holo);
+}
+
+/* Scrollbar — thin, holographic, never a default grey slab. */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-void-900); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-arc), var(--color-infinity));
+  border-radius: 999px;
+}
+
+/* ============================================================================
+   Typography primitives
+   ========================================================================= */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(0.625rem, 0.9vw, 0.75rem);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--section-accent);
+}
+
+/* Metallic silver fill — the Marvel/Stark title treatment. */
+.text-metal {
+  background: linear-gradient(
+    177deg,
+    #ffffff 0%,
+    #cfe0f5 22%,
+    #8fa6c4 44%,
+    #ffffff 52%,
+    #7e93b4 62%,
+    #dce8f8 82%,
+    #ffffff 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-holo {
+  background: linear-gradient(
+    100deg,
+    var(--color-arc) 0%,
+    var(--color-holo) 30%,
+    var(--color-infinity) 55%,
+    var(--color-quantum) 80%,
+    var(--color-arc) 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: holo-sweep 9s linear infinite;
+}
+
+@keyframes holo-sweep {
+  to { background-position: 260% 0; }
+}
+
+/* ============================================================================
+   Glass system
+   ========================================================================= */
+.glass {
+  position: relative;
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in oklab, var(--color-holo) 7%, transparent) 0%,
+      color-mix(in oklab, var(--color-holo) 2%, transparent) 42%,
+      transparent 100%
+    );
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid color-mix(in oklab, var(--color-holo) 10%, transparent);
+  box-shadow:
+    0 24px 70px -20px rgb(0 0 0 / 0.85),
+    inset 0 1px 0 0 color-mix(in oklab, var(--color-holo) 14%, transparent);
+}
+
+/* Animated holographic rim. Sits on ::before so it never clips content. */
+.glass-rim::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--rim-angle, 0deg),
+    transparent 0deg,
+    var(--section-accent) 60deg,
+    transparent 130deg,
+    transparent 230deg,
+    color-mix(in oklab, var(--color-holo) 70%, transparent) 290deg,
+    transparent 350deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: rim-spin 7s linear infinite;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+@property --rim-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes rim-spin {
+  to { --rim-angle: 360deg; }
+}
+
+/* ============================================================================
+   Glow utilities
+   ========================================================================= */
+.glow-accent {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--section-accent) 28%, transparent),
+    0 0 24px -4px color-mix(in oklab, var(--section-accent) 45%, transparent),
+    0 0 80px -10px color-mix(in oklab, var(--section-accent) 30%, transparent);
+}
+
+.text-glow {
+  text-shadow:
+    0 0 18px color-mix(in oklab, var(--section-accent) 55%, transparent),
+    0 0 60px color-mix(in oklab, var(--section-accent) 30%, transparent);
+}
+
+/* Volumetric floor haze — the light-shaft look under hero/finale type. */
+.volumetric {
+  background: radial-gradient(
+    ellipse 120% 70% at 50% 100%,
+    color-mix(in oklab, var(--section-accent) 22%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+/* ============================================================================
+   Scanline / HUD texture
+   ========================================================================= */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    rgb(0 0 0 / 0.22) 2px 3px
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.grid-floor {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--section-accent) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--section-accent) 12%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, #000 10%, transparent 75%);
+}
+
+/* ============================================================================
+   Reveal primitives — GSAP sets the final state; these are the "from".
+   ========================================================================= */
+[data-reveal] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+/* ============================================================================
+   Accessibility — the whole experience degrades to a readable document.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .text-holo { animation: none; background-position: 0 0; }
+}
+
+/* Focus visibility survives the dark theme. */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-arc);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================================================
+   POSTER SHOWCASE FRAME
+   --px / --py  : pointer offset, -0.5..0.5, written by PosterFrame.tsx
+   --hover      : 0..1 hover blend
+   ========================================================================= */
+.poster-frame {
+  --px: 0;
+  --py: 0;
+  --hover: 0;
+  position: relative;
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+  isolation: isolate;
+}
+
+/* Colour bloom behind the glass, drawn from the poster's own dominant hue. */
+.poster-bloom {
+  position: absolute;
+  inset: -12% -10% -18%;
+  background:
+    radial-gradient(
+      ellipse 60% 55% at calc(50% + var(--px) * 30%) calc(45% + var(--py) * 30%),
+      color-mix(in oklab, var(--poster-accent) 55%, transparent) 0%,
+      transparent 70%
+    );
+  filter: blur(48px);
+  opacity: calc(0.5 + var(--hover) * 0.45);
+  transition: opacity 0.5s var(--ease-cinematic);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.poster-slab {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transform:
+    rotateY(calc(var(--px) * 13deg))
+    rotateX(calc(var(--py) * -11deg))
+    translateZ(0)
+    scale(calc(1 + var(--hover) * 0.018));
+  animation: poster-float 9s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes poster-float {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -14px; }
+}
+
+.poster-viewport {
+  position: relative;
+  overflow: hidden;
+  border-radius: 21px;
+  background: var(--color-void-800);
+  /* Each poster keeps its own aspect ratio (set per-instance by PosterFrame).
+     A fixed frame would crop the artwork — on a near-square poster that means
+     slicing the event's own title off the top. */
+  aspect-ratio: var(--poster-aspect, 1.3);
+}
+
+.poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+}
+
+.poster-base {
+  transform:
+    scale(calc(1.1 + var(--hover) * 0.06))
+    translate3d(calc(var(--px) * -1.6%), calc(var(--py) * -1.6%), 0);
+  transition: transform 0.15s linear;
+  will-change: transform;
+}
+
+/* The depth-masked foreground travels ~4x further than the base — that
+   differential is the entire parallax illusion. */
+.poster-fg {
+  transform:
+    scale(calc(1.14 + var(--hover) * 0.09))
+    translate3d(calc(var(--px) * -6.5%), calc(var(--py) * -6%), 0);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  opacity: 0.9;
+  filter: saturate(1.25) contrast(1.06);
+  transition: transform 0.15s linear;
+  will-change: transform;
+}
+
+.poster-grade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 45%, color-mix(in oklab, var(--color-void-900) 70%, transparent) 100%),
+    radial-gradient(ellipse 70% 60% at 50% 40%, transparent 40%, color-mix(in oklab, var(--color-void-900) 55%, transparent) 100%);
+  pointer-events: none;
+}
+
+.poster-feather {
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 0 0 60px 20px color-mix(in oklab, var(--color-void-900) 80%, transparent),
+    inset 0 0 18px 2px color-mix(in oklab, var(--poster-accent) 30%, transparent);
+  pointer-events: none;
+}
+
+.poster-glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle 40% at calc(50% + var(--px) * 100%) calc(50% + var(--py) * 100%),
+    rgb(255 255 255 / 0.16) 0%,
+    transparent 55%
+  );
+  mix-blend-mode: overlay;
+  opacity: var(--hover);
+  pointer-events: none;
+}
+
+.poster-holo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    calc(115deg + var(--px) * 40deg),
+    transparent 20%,
+    color-mix(in oklab, var(--color-arc) 22%, transparent) 38%,
+    color-mix(in oklab, var(--color-cosmic) 18%, transparent) 48%,
+    color-mix(in oklab, var(--color-quantum) 20%, transparent) 58%,
+    transparent 76%
+  );
+  mix-blend-mode: color-dodge;
+  opacity: calc(0.18 + var(--hover) * 0.3);
+  pointer-events: none;
+}
+
+.poster-scan {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgb(0 0 0 / 0.18) 3px 4px);
+  mix-blend-mode: multiply;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* -- corner brackets ------------------------------------------------------ */
+.bracket {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 2px solid color-mix(in oklab, var(--poster-accent) 75%, white 25%);
+  opacity: calc(0.45 + var(--hover) * 0.55);
+  transition: opacity 0.4s var(--ease-cinematic);
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px var(--poster-accent));
+}
+.bracket-tl { top: 14px; left: 14px; border-right: 0; border-bottom: 0; border-top-left-radius: 8px; }
+.bracket-tr { top: 14px; right: 14px; border-left: 0; border-bottom: 0; border-top-right-radius: 8px; }
+.bracket-bl { bottom: 14px; left: 14px; border-right: 0; border-top: 0; border-bottom-left-radius: 8px; }
+.bracket-br { bottom: 14px; right: 14px; border-left: 0; border-top: 0; border-bottom-right-radius: 8px; }
+
+/* -- floor reflection ----------------------------------------------------- */
+.poster-reflection {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 100%;
+  height: 28%;
+  overflow: hidden;
+  border-radius: 0 0 22px 22px;
+  opacity: 0.13;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+  transform: rotateX(calc(var(--py) * -11deg)) scaleY(-1);
+  /* Heavier blur: a legible mirrored title reads as a rendering bug, not a reflection. */
+  filter: blur(9px) saturate(1.15);
+}
+
+.poster-reflection img {
+  width: 100%;
+  height: 380%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster-slab { animation: none; transform: none; }
+  .poster-base,
+  .poster-fg { transform: scale(1.05); }
+  .poster-reflection { display: none; }
+}
+
+/* ============================================================================
+   BUTTONS
+   ========================================================================= */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-void-900);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--section-accent) 92%, white 8%),
+    color-mix(in oklab, var(--section-accent) 55%, white 45%)
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--section-accent) 60%, transparent),
+    0 10px 34px -8px color-mix(in oklab, var(--section-accent) 70%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.5);
+  overflow: hidden;
+  transition: transform 0.45s var(--ease-cinematic), box-shadow 0.45s var(--ease-cinematic);
+}
+
+.btn-primary svg { width: 1rem; height: 1rem; transition: translate 0.45s var(--ease-cinematic); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px color-mix(in oklab, var(--section-accent) 80%, transparent), 0 18px 50px -10px color-mix(in oklab, var(--section-accent) 85%, transparent), inset 0 1px 0 rgb(255 255 255 / 0.6); }
+.btn-primary:hover svg { translate: 4px 0; }
+
+/* Specular sweep on hover. */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+  translate: -120% 0;
+  transition: translate 0.7s var(--ease-power);
+}
+.btn-primary:hover::after { translate: 120% 0; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.9rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-holo) 18%, transparent);
+  background: color-mix(in oklab, var(--color-holo) 4%, transparent);
+  backdrop-filter: blur(12px);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+  transition: border-color 0.4s, color 0.4s, background 0.4s;
+}
+.btn-ghost:hover {
+  border-color: color-mix(in oklab, var(--section-accent) 55%, transparent);
+  color: var(--color-holo);
+  background: color-mix(in oklab, var(--section-accent) 10%, transparent);
+}
+
+/* Energy pulse travelling along a divider. */
+.divider-pulse {
+  position: absolute;
+  inset-block: 0;
+  width: 34%;
+  background: linear-gradient(90deg, transparent, var(--section-accent), transparent);
+  animation: divider-travel 3.6s var(--ease-power) infinite;
+}
+@keyframes divider-travel {
+  0%   { translate: -120% 0; }
+  100% { translate: 400% 0; }
+}
+
+/* ============================================================================
+   UNIVERSE BACKDROPS
+   ========================================================================= */
+
+/* -- Stark Lab ------------------------------------------------------------ */
+.pad { animation: pad-blink 2.6s ease-in-out infinite; }
+@keyframes pad-blink {
+  0%, 100% { fill-opacity: 0.25; r: 4; }
+  50%      { fill-opacity: 0.95; r: 5.5; }
+}
+
+.current {
+  stroke-dasharray: 120 2400;
+  animation: current-flow 4.2s linear infinite;
+  filter: drop-shadow(0 0 6px var(--section-accent));
+}
+@keyframes current-flow {
+  from { stroke-dashoffset: 2520; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* -- Newsroom ------------------------------------------------------------- */
+.newsprint {
+  background-image:
+    repeating-linear-gradient(0deg, rgb(230 226 214 / 0.6) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(90deg, rgb(230 226 214 / 0.35) 0 1px, transparent 1px 9px);
+  mix-blend-mode: overlay;
+}
+
+.halftone {
+  background-image: radial-gradient(circle, rgb(255 255 255 / 0.8) 0.8px, transparent 0.9px);
+  background-size: 6px 6px;
+  mix-blend-mode: overlay;
+}
+
+.shutter-flash {
+  background: radial-gradient(circle at 50% 40%, rgb(255 255 255 / 0.9), transparent 45%);
+  opacity: 0;
+  animation: shutter 7s steps(1, end) infinite;
+  mix-blend-mode: screen;
+}
+@keyframes shutter {
+  0%, 88%   { opacity: 0; }
+  89%       { opacity: 0.5; }
+  90%       { opacity: 0; }
+  92%       { opacity: 0.28; }
+  93%, 100% { opacity: 0; }
+}
+
+.polaroid {
+  position: absolute;
+  width: clamp(70px, 8vw, 118px);
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(180deg, #f6f2e8 0%, #f6f2e8 78%, #e7e0d0 100%);
+  box-shadow: 0 18px 40px -14px rgb(0 0 0 / 0.9);
+  opacity: 0.16;
+  rotate: var(--rot);
+  animation: polaroid-drift 12s ease-in-out infinite;
+}
+.polaroid::before {
+  content: '';
+  position: absolute;
+  inset: 7% 7% 22%;
+  background: linear-gradient(135deg, #2a2f3d, #0e1220);
+}
+@keyframes polaroid-drift {
+  0%, 100% { translate: 0 0; rotate: var(--rot); }
+  50%      { translate: 12px -24px; rotate: calc(var(--rot) * -0.6); }
+}
+
+/* -- Brainverse ----------------------------------------------------------- */
+.synapse {
+  stroke-dasharray: 6 10;
+  animation: synapse-fire 3.4s ease-in-out infinite;
+}
+@keyframes synapse-fire {
+  0%, 100% { stroke-opacity: 0.1; stroke-dashoffset: 0; }
+  50%      { stroke-opacity: 0.85; stroke-dashoffset: -48; }
+}
+
+.neuron {
+  animation: neuron-pulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px var(--section-accent));
+}
+@keyframes neuron-pulse {
+  0%, 100% { fill-opacity: 0.35; r: 3.5; }
+  50%      { fill-opacity: 1; r: 6; }
+}
+
+/* -- Infinity ------------------------------------------------------------- */
+.cosmic-rift {
+  background:
+    radial-gradient(ellipse 45% 60% at 18% 30%, color-mix(in oklab, var(--color-infinity) 42%, transparent), transparent 65%),
+    radial-gradient(ellipse 40% 50% at 82% 68%, color-mix(in oklab, var(--color-cosmic) 38%, transparent), transparent 65%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, color-mix(in oklab, var(--color-arc) 26%, transparent), transparent 70%);
+  filter: blur(40px);
+  animation: rift-breathe 14s ease-in-out infinite;
+}
+@keyframes rift-breathe {
+  0%, 100% { opacity: 0.55; scale: 1; }
+  50%      { opacity: 0.9; scale: 1.08; }
+}
+
+/* -- Stark Forge ---------------------------------------------------------- */
+.hexgrid {
+  background-image:
+    linear-gradient(30deg, color-mix(in oklab, var(--section-accent) 30%, transparent) 1px, transparent 1px),
+    linear-gradient(-30deg, color-mix(in oklab, var(--section-accent) 30%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--section-accent) 20%, transparent) 1px, transparent 1px);
+  background-size: 42px 74px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 20%, transparent 78%);
+}
+
+.binary-column {
+  position: absolute;
+  top: -40%;
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 0.85vw, 13px);
+  letter-spacing: 0.32em;
+  color: var(--section-accent);
+  opacity: 0.28;
+  white-space: nowrap;
+  animation: binary-fall linear infinite;
+  mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 60%, transparent);
+  text-shadow: 0 0 8px currentColor;
+}
+@keyframes binary-fall {
+  from { translate: 0 -60%; }
+  to   { translate: 0 160%; }
+}
+
+/* ============================================================================
+   BEAT WORDS — revealed one at a time during the pinned scrub.
+   --burst is animated by GSAP at the moment each word lands.
+   ========================================================================= */
+@property --burst {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+.beat-word {
+  --burst: 0;
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(0.8rem, 1.15vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-holo);
+  opacity: 0;
+  text-shadow:
+    0 0 calc(8px + var(--burst) * 26px) color-mix(in oklab, var(--section-accent) calc(60% + var(--burst) * 40%), transparent),
+    0 0 calc(24px + var(--burst) * 60px) color-mix(in oklab, var(--section-accent) calc(30% * var(--burst) + 10%), transparent);
+  will-change: opacity, transform, filter;
+}
+
+/* Radiating shock ring on the burst frame. */
+.beat-word::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.2em;
+  height: 1.2em;
+  translate: -50% -50%;
+  border-radius: 999px;
+  border: 1px solid var(--section-accent);
+  scale: calc(1 + var(--burst) * 3.4);
+  opacity: calc(var(--burst) * 0.7);
+  pointer-events: none;
+}
+
+/* ============================================================================
+   ARC REACTOR
+   Concentric rings + a hot core + expanding energy waves. Sits behind the hero
+   type at low opacity so it reads as light in the room, not a logo on a page.
+   ========================================================================= */
+.arc-reactor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(320px, 46vw, 720px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.arc-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-arc) 45%, transparent);
+  box-shadow:
+    0 0 40px -6px color-mix(in oklab, var(--color-arc) 55%, transparent),
+    inset 0 0 60px -10px color-mix(in oklab, var(--color-arc) 45%, transparent);
+}
+
+.arc-ring-1 { inset: 0;   animation: arc-spin 26s linear infinite; border-style: dashed; opacity: 0.5; }
+.arc-ring-2 { inset: 12%; animation: arc-spin 18s linear infinite reverse; opacity: 0.75; }
+.arc-ring-3 {
+  inset: 24%;
+  border-width: 2px;
+  border-color: color-mix(in oklab, var(--color-arc) 70%, transparent);
+  animation: arc-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes arc-spin { to { rotate: 360deg; } }
+
+@keyframes arc-pulse {
+  0%, 100% { opacity: 0.55; scale: 1; }
+  50%      { opacity: 1; scale: 1.035; }
+}
+
+.arc-core {
+  position: absolute;
+  inset: 41%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, #ffffff 0%, #bff0ff 22%, color-mix(in oklab, var(--color-arc) 85%, transparent) 45%, transparent 72%);
+  filter: blur(2px);
+  animation: arc-core-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes arc-core-pulse {
+  0%, 100% { opacity: 0.7; scale: 0.94; }
+  50%      { opacity: 1; scale: 1.06; }
+}
+
+/* Energy waves spreading across the screen. */
+.arc-wave {
+  position: absolute;
+  inset: 30%;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-arc) 60%, transparent);
+  animation: arc-wave-out 4.5s var(--ease-power) infinite;
+}
+.arc-wave-2 { animation-delay: 2.25s; }
+
+@keyframes arc-wave-out {
+  0%   { scale: 0.5; opacity: 0.8; }
+  100% { scale: 3.2; opacity: 0; }
+}
+
+/* ============================================================================
+   SCROLL CUE
+   ========================================================================= */
+.scroll-cue {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 36px;
+  border: 1px solid color-mix(in oklab, var(--color-holo) 28%, transparent);
+  border-radius: 999px;
+}
+.scroll-cue::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 3px;
+  height: 7px;
+  translate: -50% 0;
+  border-radius: 999px;
+  background: var(--color-arc);
+  box-shadow: 0 0 10px var(--color-arc);
+  animation: cue-drop 1.9s var(--ease-power) infinite;
+}
+@keyframes cue-drop {
+  0%   { translate: -50% 0; opacity: 0; }
+  25%  { opacity: 1; }
+  75%  { translate: -50% 14px; opacity: 0; }
+  100% { translate: -50% 14px; opacity: 0; }
+}
+
+/* ============================================================================
+   EVENT GALAXY
+   ========================================================================= */
+.galaxy-field {
+  position: relative;
+  width: min(96vw, 1180px);
+  height: min(74vh, 620px);
+  transform-style: preserve-3d;
+  perspective: 1200px;
+  z-index: 10;
+}
+
+.galaxy-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(180px, 26vw, 340px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.galaxy-core-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px dashed color-mix(in oklab, var(--color-infinity) 55%, transparent);
+  animation: arc-spin 34s linear infinite;
+}
+.galaxy-core-ring-2 {
+  inset: 18%;
+  border-style: solid;
+  border-color: color-mix(in oklab, var(--color-arc) 45%, transparent);
+  animation: arc-spin 22s linear infinite reverse;
+}
+.galaxy-core-glow {
+  position: absolute;
+  inset: 30%;
+  border-radius: 999px;
+  background: radial-gradient(circle, #fff 0%, var(--color-infinity) 35%, transparent 70%);
+  filter: blur(14px);
+  animation: arc-core-pulse 4s ease-in-out infinite;
+}
+
+/* -- orbit cards ---------------------------------------------------------- */
+.orbit-card {
+  --depth: 0px;
+  --orbit-accent: var(--color-arc);
+  position: absolute;
+  width: clamp(150px, 19vw, 232px);
+  translate: -50% -50%;
+  transform: translateZ(var(--depth));
+  transform-style: preserve-3d;
+  animation: orbit-float 11s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes orbit-float {
+  0%, 100% { translate: -50% -50%; }
+  50%      { translate: -50% calc(-50% - 22px); }
+}
+
+.orbit-card-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.1rem 1.15rem 1.25rem;
+  border-radius: 16px;
+  overflow: hidden;
+  border-color: color-mix(in oklab, var(--orbit-accent) 30%, transparent);
+  transition:
+    transform 0.6s var(--ease-cinematic),
+    box-shadow 0.6s var(--ease-cinematic),
+    border-color 0.6s;
+  transform: rotateY(0deg) scale(1);
+}
+
+.orbit-card:hover .orbit-card-inner,
+.orbit-card:focus-visible .orbit-card-inner {
+  transform: scale(1.09) rotateY(-6deg);
+  border-color: color-mix(in oklab, var(--orbit-accent) 75%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--orbit-accent) 55%, transparent),
+    0 22px 60px -14px color-mix(in oklab, var(--orbit-accent) 70%, transparent),
+    0 0 90px -20px color-mix(in oklab, var(--orbit-accent) 60%, transparent);
+}
+
+.orbit-index {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  color: var(--orbit-accent);
+}
+
+.orbit-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(0.82rem, 1.15vw, 1rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--color-holo);
+}
+
+.orbit-tag {
+  font-size: 0.62rem;
+  line-height: 1.35;
+  color: var(--color-muted);
+}
+
+/* Energy pulse that sweeps the card on hover. */
+.orbit-pulse {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, color-mix(in oklab, var(--orbit-accent) 40%, transparent) 50%, transparent 65%);
+  translate: -130% 0;
+  transition: translate 0.9s var(--ease-power);
+  pointer-events: none;
+}
+.orbit-card:hover .orbit-pulse { translate: 130% 0; }
+
+/* Particle trail behind each card. */
+.orbit-trail {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 200%;
+  height: 200%;
+  translate: -50% -50%;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in oklab, var(--orbit-accent) 28%, transparent) 0%, transparent 62%);
+  filter: blur(26px);
+  opacity: 0.65;
+  pointer-events: none;
+  animation: arc-core-pulse 5s ease-in-out infinite;
+}
+
+@media (max-width: 900px) {
+  /* Orbit becomes a readable stack on small screens — no 3D scatter. */
+  .galaxy-field {
+    display: grid;
+    gap: 0.85rem;
+    height: auto;
+    perspective: none;
+  }
+  .orbit-card {
+    position: relative;
+    left: auto !important;
+    top: auto !important;
+    width: 100%;
+    translate: 0 0;
+    transform: none;
+    animation: none;
+  }
+  @keyframes orbit-float { 0%, 100% { translate: 0 0; } }
+}
+
+/* ============================================================================
+   TEAM MEMBERS
+   Compact circular portraits. Same glass, rim, scan and hover-lift vocabulary
+   as the rest of the site — just a smaller, rounder frame.
+   ========================================================================= */
+.member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  text-align: center;
+  perspective: 900px;
+}
+
+.member-orb {
+  position: relative;
+  width: clamp(74px, 9vw, 104px);
+  aspect-ratio: 1;
+  margin-bottom: 0.7rem;
+  border-radius: 999px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in oklab, var(--section-accent) 26%, transparent), transparent 68%),
+    linear-gradient(160deg, var(--color-void-600), var(--color-void-800));
+  border: 1px solid color-mix(in oklab, var(--section-accent) 30%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-holo) 8%, transparent),
+    0 14px 34px -14px rgb(0 0 0 / 0.85),
+    inset 0 1px 0 color-mix(in oklab, var(--color-holo) 14%, transparent);
+  transition:
+    transform 0.6s var(--ease-cinematic),
+    box-shadow 0.6s var(--ease-cinematic),
+    border-color 0.6s;
+  will-change: transform;
+}
+
+.member-orb img { width: 100%; height: 100%; object-fit: cover; }
+
+.member-card:not(.member-card--empty):hover .member-orb {
+  transform: translateY(-8px) scale(1.06);
+  border-color: color-mix(in oklab, var(--section-accent) 70%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--section-accent) 55%, transparent),
+    0 22px 50px -16px color-mix(in oklab, var(--section-accent) 70%, transparent),
+    0 0 70px -18px color-mix(in oklab, var(--section-accent) 65%, transparent);
+}
+
+.member-monogram {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.1vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: color-mix(in oklab, var(--section-accent) 80%, white 20%);
+  text-shadow: 0 0 20px var(--section-accent);
+}
+
+.member-scan {
+  position: absolute;
+  inset-inline: 0;
+  height: 34%;
+  top: -36%;
+  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--section-accent) 34%, transparent), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.member-card:hover .member-scan {
+  opacity: 1;
+  animation: member-scan-run 1.6s var(--ease-power) infinite;
+}
+@keyframes member-scan-run {
+  from { top: -36%; }
+  to   { top: 105%; }
+}
+
+.member-name {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: var(--color-holo);
+  /* Long faculty names wrap rather than widening the column. */
+  overflow-wrap: anywhere;
+}
+
+.member-role {
+  margin-top: 0.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.member-card--empty { opacity: 0.5; }
+
+/* ============================================================================
+   FINALE — convergence
+   --converge is scrubbed 0 -> 1 by GSAP; the streaks collapse to the centre.
+   ========================================================================= */
+@property --converge {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+.converge-streak {
+  --converge: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(180px, 26vw, 420px);
+  height: 2px;
+  transform-origin: 0% 50%;
+  transform:
+    rotate(var(--angle))
+    translateX(calc(var(--offset) * 4 * (1 - var(--converge)) + 4%));
+  background: linear-gradient(90deg, transparent, var(--streak-color), transparent);
+  filter: blur(0.5px) drop-shadow(0 0 8px var(--streak-color));
+  opacity: 0;
+  scale: calc(1 - var(--converge) * 0.55) 1;
+  pointer-events: none;
+}
+
+.finale-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(80vw, 900px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 999px;
+  background: radial-gradient(circle, #ffffff 0%, var(--color-stark) 18%, var(--color-infinity) 42%, transparent 68%);
+  filter: blur(28px);
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* ============================================================================
+   NAVIGATION
+   ========================================================================= */
+.skip-link {
+  position: fixed;
+  left: 50%;
+  top: 0.75rem;
+  translate: -50% -200%;
+  z-index: 200;
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  background: var(--color-arc);
+  color: var(--color-void-900);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: translate 0.3s var(--ease-cinematic);
+}
+.skip-link:focus-visible { translate: -50% 0; }
+
+.nav-shell {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 100;
+  padding: 0.9rem clamp(0.75rem, 3vw, 2rem);
+  opacity: 0;
+  translate: 0 -110%;
+  transition: opacity 0.6s var(--ease-cinematic), translate 0.6s var(--ease-cinematic);
+  pointer-events: none;
+}
+.nav-shell--visible { opacity: 1; translate: 0 0; pointer-events: auto; }
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1500px;
+  margin-inline: auto;
+  padding: 0.6rem 0.7rem 0.6rem 1rem;
+  border-radius: 999px;
+}
+
+.nav-brand { display: inline-flex; align-items: center; gap: 0.6rem; }
+
+.nav-brand-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #fff 0%, var(--color-arc) 40%, transparent 72%);
+  box-shadow: 0 0 16px var(--color-arc);
+  animation: arc-core-pulse 3s ease-in-out infinite;
+}
+
+.nav-brand-text {
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-holo);
+  white-space: nowrap;
+}
+
+.nav-links { display: none; gap: 0.4rem; }
+@media (min-width: 860px) { .nav-links { display: flex; } }
+
+.nav-link {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color 0.35s, background 0.35s;
+}
+.nav-link:hover { color: var(--color-holo); background: color-mix(in oklab, var(--color-holo) 6%, transparent); }
+.nav-link[aria-current='page'] {
+  color: var(--color-arc);
+  background: color-mix(in oklab, var(--color-arc) 12%, transparent);
+}
+
+.nav-progress { width: 30px; height: 30px; rotate: -90deg; flex: none; }
+.nav-progress-track { fill: none; stroke: color-mix(in oklab, var(--color-holo) 12%, transparent); stroke-width: 2; }
+.nav-progress-fill {
+  fill: none;
+  stroke: var(--color-arc);
+  stroke-width: 2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 5px var(--color-arc));
+  transition: stroke-dashoffset 0.15s linear;
+}
+
+.nav-toggle {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-holo) 14%, transparent);
+  transition: border-color 0.3s;
+}
+.nav-toggle:hover { border-color: color-mix(in oklab, var(--color-arc) 55%, transparent); }
+@media (min-width: 860px) { .nav-toggle { display: none; } }
+
+.nav-burger, .nav-burger::before, .nav-burger::after {
+  display: block;
+  width: 15px;
+  height: 1.5px;
+  background: var(--color-holo);
+  border-radius: 2px;
+  transition: transform 0.4s var(--ease-cinematic), opacity 0.3s;
+}
+.nav-burger { position: relative; }
+.nav-burger::before, .nav-burger::after { content: ''; position: absolute; left: 0; }
+.nav-burger::before { top: -5px; }
+.nav-burger::after  { top: 5px; }
+.nav-burger--open { background: transparent; }
+.nav-burger--open::before { transform: translateY(5px) rotate(45deg); }
+.nav-burger--open::after  { transform: translateY(-5px) rotate(-45deg); }
+
+.nav-sheet {
+  max-width: 1500px;
+  margin: 0.6rem auto 0;
+  padding: 1.2rem 1.4rem 1.5rem;
+  border-radius: 22px;
+  opacity: 0;
+  translate: 0 -12px;
+  transition: opacity 0.35s, translate 0.35s;
+}
+.nav-sheet--open { opacity: 1; translate: 0 0; }
+.nav-sheet ul { display: flex; flex-direction: column; gap: 0.15rem; }
+.nav-sheet a {
+  display: block;
+  padding: 0.7rem 0.4rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--color-holo) 6%, transparent);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+  transition: color 0.3s, padding-left 0.3s;
+}
+.nav-sheet a:hover { color: var(--color-arc); padding-left: 0.9rem; }
+@media (min-width: 860px) { .nav-sheet { display: none; } }
+
+/* ============================================================================
+   PRELOADER
+   ========================================================================= */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.6rem;
+  background: var(--color-void-900);
+  transition: opacity 0.9s var(--ease-cinematic), filter 0.9s var(--ease-cinematic);
+}
+
+.preloader--out {
+  opacity: 0;
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.preloader-reactor { position: relative; width: 92px; height: 92px; }
+
+.preloader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-arc) 55%, transparent);
+  border-top-color: var(--color-arc);
+  animation: arc-spin 1.5s linear infinite;
+}
+.preloader-ring-2 {
+  inset: 16%;
+  border-color: color-mix(in oklab, var(--color-infinity) 45%, transparent);
+  border-bottom-color: var(--color-infinity);
+  animation: arc-spin 2.1s linear infinite reverse;
+}
+.preloader-core {
+  position: absolute;
+  inset: 34%;
+  border-radius: 999px;
+  background: radial-gradient(circle, #fff, var(--color-arc) 55%, transparent 75%);
+  animation: arc-core-pulse 1.6s ease-in-out infinite;
+}
+
+.preloader-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.preloader-bar {
+  position: relative;
+  width: 168px;
+  height: 1px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--color-holo) 10%, transparent);
+}
+.preloader-bar span {
+  position: absolute;
+  inset-block: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, var(--color-arc), transparent);
+  animation: divider-travel 1.4s var(--ease-power) infinite;
+}
+
+/* ============================================================================
+   INTRO FILM
+   Sits above the preloader (z-300) and owns the scroll lock while it plays.
+   ========================================================================= */
+html.intro-active,
+html.intro-active body {
+  overflow: hidden;
+  /* Class-based, so the preloader clearing its inline overflow can't unlock
+     scrolling underneath a film that is still running. */
+}
+
+.intro {
+  position: fixed;
+  inset: 0;
+  /* Mobile browser chrome makes a fixed inset:0 box taller than what's actually
+     on screen, so a vertically centred film drifts toward the bottom. dvh tracks
+     the visible area; the vh line is the fallback for engines without it.
+     top+bottom+height is over-constrained, so `bottom` is ignored and height wins. */
+  height: 100vh;
+  height: 100dvh;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  background: var(--color-void-900);
+  transition: opacity 0.9s var(--ease-cinematic), filter 0.9s var(--ease-cinematic);
+}
+
+.intro--out {
+  opacity: 0;
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.intro-video {
+  width: 100%;
+  height: 100%;
+  /* `contain`, not `cover`.
+     Both films carry baked-in branding at the frame edges (the CUESTIC / CHRIST
+     lockup), and cover crops exactly that away on any viewport whose aspect
+     ratio doesn't match the source. Letterbox bars are invisible here anyway —
+     the stage behind is already --color-void-900. */
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 96% 90% at 50% 50%,
+    transparent 70%,
+    color-mix(in oklab, var(--color-void-900) 65%, transparent) 100%
+  );
+}
+
+.intro-skip {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2.5rem);
+  bottom: clamp(1rem, 3vw, 2.5rem);
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-holo) 22%, transparent);
+  background: color-mix(in oklab, var(--color-void-900) 55%, transparent);
+  backdrop-filter: blur(10px);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+  opacity: 0;
+  translate: 0 8px;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-cinematic), translate 0.5s var(--ease-cinematic),
+    border-color 0.3s, color 0.3s;
+}
+
+.intro-skip--shown {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+.intro-skip:hover {
+  border-color: color-mix(in oklab, var(--color-arc) 60%, transparent);
+  color: var(--color-holo);
+}
+
+/* ============================================================================
+   EVENT INFORMATION CARD
+   A nested glass panel inside the event details panel. Compact by design —
+   it has to stay fully readable for the whole pinned scroll of its section.
+   ========================================================================= */
+.info-card {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 18px;
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--color-holo) 6%, transparent),
+    color-mix(in oklab, var(--section-accent) 5%, transparent) 60%,
+    transparent
+  );
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  border: 1px solid color-mix(in oklab, var(--section-accent) 22%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-holo) 12%, transparent),
+    0 14px 40px -22px color-mix(in oklab, var(--section-accent) 60%, transparent);
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 1.55rem 1fr;
+  align-items: start;
+  gap: 0.7rem;
+  padding: 0.38rem 0;
+}
+.info-row + .info-row {
+  border-top: 1px solid color-mix(in oklab, var(--color-holo) 6%, transparent);
+}
+
+.info-icon {
+  display: grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  margin-top: 0.05rem;
+  border-radius: 8px;
+  color: var(--section-accent);
+  background: color-mix(in oklab, var(--section-accent) 12%, transparent);
+  box-shadow: 0 0 14px -4px color-mix(in oklab, var(--section-accent) 70%, transparent);
+}
+.info-icon svg { width: 0.9rem; height: 0.9rem; }
+
+.info-body { display: flex; flex-direction: column; gap: 0.12rem; min-width: 0; }
+
+.info-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.info-value {
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--color-holo);
+  /* Long venue strings wrap instead of forcing the card wider. */
+  overflow-wrap: anywhere;
+}
+.info-value--tba {
+  font-style: italic;
+  font-weight: 400;
+  color: color-mix(in oklab, var(--color-muted) 80%, transparent);
+}
+
+.info-note {
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: color-mix(in oklab, var(--section-accent) 75%, white 25%);
+  opacity: 0.85;
+}
+
+/* -- coordinators --------------------------------------------------------- */
+.coord-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  text-align: left;
+  color: inherit;
+}
+
+.coord-chevron {
+  display: grid;
+  place-items: center;
+  color: var(--section-accent);
+  transition: rotate 0.35s var(--ease-cinematic);
+}
+.coord-chevron svg { width: 0.8rem; height: 0.8rem; }
+.info-coords.is-open .coord-chevron { rotate: 180deg; }
+
+.coord-list {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+
+.coord {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.6rem;
+  min-width: 0;
+}
+
+.coord-name {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--color-holo);
+}
+
+.coord-phone {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--section-accent);
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+.coord-phone:hover { color: var(--color-holo); }
+
+/* Mobile: collapsed until tapped. Desktop: always open, no toggle affordance. */
+@media (max-width: 639px) {
+  .info-coords:not(.is-open) .coord-list { display: none; }
+}
+@media (min-width: 640px) {
+  .coord-toggle { pointer-events: none; }
+  .coord-chevron { display: none; }
+  .info-coords .coord-list { display: grid; }
+}
+
+/* ============================================================================
+   EVENT ROUNDS / STORY STEPS
+   ========================================================================= */
+.round-list {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  list-style: none;
+}
+
+.round {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.42rem 0.75rem;
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--color-holo) 3.5%, transparent);
+  border-left: 2px solid color-mix(in oklab, var(--section-accent) 55%, transparent);
+}
+
+.round-label {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--section-accent);
+}
+
+.round-body { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+
+.round-title {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-holo);
+}
+
+.round-detail {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--color-silver);
+  opacity: 0.72;
+}
+
+.closing-line {
+  margin-top: 1rem;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-holo);
+  text-shadow:
+    0 0 16px color-mix(in oklab, var(--section-accent) 65%, transparent),
+    0 0 46px color-mix(in oklab, var(--section-accent) 35%, transparent);
+}
+
+/* ============================================================================
+   TEAM GROUPS
+   ========================================================================= */
+.team-group + .team-group { margin-top: 3.5rem; }
+
+.team-group-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.team-group-heading h3 {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--section-accent);
+  text-shadow: 0 0 18px color-mix(in oklab, var(--section-accent) 55%, transparent);
+}
+
+.team-group-rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--section-accent) 40%, transparent),
+    transparent
+  );
+}
+
+.member-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  color: var(--section-accent);
+  opacity: 0.85;
+  transition: opacity 0.3s, color 0.3s;
+}
+.member-phone:hover { opacity: 1; color: var(--color-holo); }
+.member-phone svg { width: 0.68rem; height: 0.68rem; flex: none; }
+
+/* Centred card flow.
+   A plain 4-column grid strands a two-person group against the left edge; this
+   keeps the same card widths at every breakpoint but centres any row that
+   doesn't fill, so each category reads as a deliberate group. */
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.team-grid { gap: 1.6rem 1.1rem; }
+.team-grid > .member-card { width: clamp(96px, 27vw, 132px); }
+
+@media (min-width: 640px) {
+  .team-grid { gap: 2rem 1.6rem; }
+  .team-grid > .member-card { width: 132px; }
+}
+
+/* ============================================================================
+   REGISTRATION CTA
+   Layers a pulse ring and a click ripple over the existing .btn-primary,
+   so every other use of that class is untouched.
+   ========================================================================= */
+.register-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+.register-wrap--xl { align-items: center; }
+
+.register-note {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--section-accent) 70%, white 30%);
+  opacity: 0.75;
+}
+
+.btn-register {
+  position: relative;
+  isolation: isolate;
+  /* Metallic rim over the accent fill. */
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-holo) 45%, transparent),
+    0 0 0 2px color-mix(in oklab, var(--section-accent) 55%, transparent),
+    0 10px 34px -8px color-mix(in oklab, var(--section-accent) 75%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.55);
+}
+
+.btn-register-label { position: relative; z-index: 2; }
+.btn-register svg { position: relative; z-index: 2; }
+
+.btn-register:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-holo) 70%, transparent),
+    0 0 0 3px color-mix(in oklab, var(--section-accent) 70%, transparent),
+    0 18px 56px -10px color-mix(in oklab, var(--section-accent) 90%, transparent),
+    0 0 90px -18px color-mix(in oklab, var(--section-accent) 80%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 0.7);
+}
+.btn-register:hover svg { translate: 2px -2px; }
+
+/* Slow breathing halo so the CTA reads as live without demanding attention. */
+.btn-pulse {
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--section-accent) 70%, transparent);
+  opacity: 0;
+  z-index: 0;
+  animation: btn-pulse-ring 3.4s var(--ease-power) infinite;
+  pointer-events: none;
+}
+
+@keyframes btn-pulse-ring {
+  0%   { scale: 1; opacity: 0.65; }
+  70%  { scale: 1.28; opacity: 0; }
+  100% { scale: 1.28; opacity: 0; }
+}
+
+/* Energy burst fired on click (navigation is never blocked). */
+.btn-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 50%, rgb(255 255 255 / 0.9), transparent 62%);
+  z-index: 1;
+  animation: btn-ripple-out 0.68s var(--ease-cinematic) forwards;
+  pointer-events: none;
+}
+
+@keyframes btn-ripple-out {
+  0%   { scale: 0.6; opacity: 0.95; }
+  100% { scale: 2.1; opacity: 0; }
+}
+
+/* -- finale scale --------------------------------------------------------- */
+.finale-cta-lead {
+  margin-bottom: 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-holo);
+  text-shadow:
+    0 0 20px color-mix(in oklab, var(--section-accent) 60%, transparent),
+    0 0 60px color-mix(in oklab, var(--section-accent) 35%, transparent);
+}
+
+.btn-register--xl {
+  padding: 1.15rem 2.4rem;
+  font-size: 0.86rem;
+  letter-spacing: 0.2em;
+}
+.btn-register--xl svg { width: 1.15rem; height: 1.15rem; }
+
+@media (max-width: 480px) {
+  .btn-register--xl {
+    padding: 1rem 1.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+  }
+}
+
+/* -- closing block -------------------------------------------------------- */
+.closing-block { margin-top: 1rem; text-align: center; }
+.closing-block .closing-line { margin-top: 0; }
+
+.closing-sub {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--section-accent) 75%, white 25%);
+  opacity: 0.8;
+}
+
+/* -- Stark Lab: instrumentation layer ------------------------------------- */
+.scope-wave {
+  stroke-dasharray: 90 620;
+  filter: drop-shadow(0 0 6px currentColor);
+  animation: scope-sweep 3.8s linear infinite;
+}
+.scope-wave--square { animation-duration: 5.2s; animation-delay: 0.9s; }
+
+@keyframes scope-sweep {
+  from { stroke-dashoffset: 710; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.gate {
+  opacity: 0.25;
+  filter: drop-shadow(0 0 5px var(--section-accent));
+  animation: gate-fire 4.4s ease-in-out infinite;
+}
+
+@keyframes gate-fire {
+  0%, 100% { opacity: 0.18; }
+  45%      { opacity: 0.85; }
+  55%      { opacity: 0.8; }
+}
+
+.pcb {
+  animation: pcb-drift 16s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes pcb-drift {
+  0%, 100% { translate: 0 0; rotate: -1.5deg; }
+  50%      { translate: 0 -26px; rotate: 1.5deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scope-wave, .gate, .pcb { animation: none; }
+  .btn-pulse, .btn-ripple { animation: none; opacity: 0; }
+}

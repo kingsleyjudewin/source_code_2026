@@ -1,0 +1,152 @@
+{
+  "brand-new-circuit": {
+    "id": "brand-new-circuit",
+    "source": "BRANDNEWCIRCUIT.png",
+    "width": 648,
+    "height": 543,
+    "aspect": 1.1934,
+    "widths": [
+      640,
+      1080,
+      1600,
+      2074
+    ],
+    "avif": "/posters/generated/brand-new-circuit/{w}.avif",
+    "webp": "/posters/generated/brand-new-circuit/{w}.webp",
+    "depth": "/posters/generated/brand-new-circuit/depth.webp",
+    "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAACwBACdASoYABQAPuVgpE2pJaOiMAwBIByJZgCw7B6RaO925KRJYDASsnw5Zx8AAP7zHXm9bPyNqiejBJnJmymW3GIH1XnG/8ZE8rai8E6ah/VEh3aMFYykcBQ1v+3glOfH66NWTWBcscSkHhNeOAAA",
+    "dominant": "#080808",
+    "mean": "#6b3234",
+    "accent": "hsl(0 70% 50%)",
+    "accentHsl": {
+      "h": 0,
+      "s": 70,
+      "l": 50
+    }
+  },
+  "daily-bugle": {
+    "id": "daily-bugle",
+    "source": "DAILY BUGLE.png",
+    "width": 687,
+    "height": 691,
+    "aspect": 0.9942,
+    "widths": [
+      640,
+      1080,
+      1600,
+      2198
+    ],
+    "avif": "/posters/generated/daily-bugle/{w}.avif",
+    "webp": "/posters/generated/daily-bugle/{w}.webp",
+    "depth": "/posters/generated/daily-bugle/depth.webp",
+    "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAACQBQCdASoYABgAPtlgpE2oJiOiN/qoAQAbCWQAwoAeibEAZFU+p+gV6oOvSaUg6PyIXowrAAD+yJG6u04+/w1wRVDm7slCYaAP4FC0n/9bAB7i3HhqKLrVM04BpLpoREnQKQeGz2odrIZVgvU52PDfFNERL9CxTACI9gB52NLhYb5yAAA=",
+    "dominant": "#e8d8d8",
+    "mean": "#bf9b9c",
+    "accent": "hsl(0 55% 72%)",
+    "accentHsl": {
+      "h": 0,
+      "s": 55,
+      "l": 72
+    }
+  },
+  "brainverse": {
+    "id": "brainverse",
+    "source": "BRAINVERSE.png",
+    "width": 1375,
+    "height": 768,
+    "aspect": 1.7904,
+    "widths": [
+      640,
+      1080,
+      1600,
+      2200
+    ],
+    "avif": "/posters/generated/brainverse/{w}.avif",
+    "webp": "/posters/generated/brainverse/{w}.webp",
+    "depth": "/posters/generated/brainverse/depth.webp",
+    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAQBACdASoYAA0APu1krU6ppaSiMAgBMB2JQBOgBH20gOks3elCnH8j4AD+0fK9nM7QzqeLladC8bN42NepWuldJ5+JPG2DpMoRwKEyYU4ObJvglX7eAAAA",
+    "dominant": "#182838",
+    "mean": "#5a596c",
+    "accent": "hsl(210 55% 50%)",
+    "accentHsl": {
+      "h": 210,
+      "s": 55,
+      "l": 50
+    }
+  },
+  "the-gauntlet": {
+    "id": "the-gauntlet",
+    "source": "gontlet.png",
+    "width": 1376,
+    "height": 768,
+    "aspect": 1.7917,
+    "widths": [
+      640,
+      1080,
+      1600,
+      2200
+    ],
+    "avif": "/posters/generated/the-gauntlet/{w}.avif",
+    "webp": "/posters/generated/the-gauntlet/{w}.webp",
+    "depth": "/posters/generated/the-gauntlet/depth.webp",
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAwCdASoYAA0APu1iqU2ppaOiMAgBMB2JZwCuHB6Pzwc95jHcQAD+cy25aA2r8PmKCZMpJ5Yo/sMl34mV0z60XBsQAA==",
+    "dominant": "#080818",
+    "mean": "#2e2c37",
+    "accent": "hsl(240 68% 50%)",
+    "accentHsl": {
+      "h": 240,
+      "s": 68,
+      "l": 50
+    }
+  },
+  "stark-forge": {
+    "id": "stark-forge",
+    "source": "STARKFORGE.png",
+    "width": 648,
+    "height": 543,
+    "aspect": 1.1934,
+    "widths": [
+      640,
+      1080,
+      1600,
+      2074
+    ],
+    "avif": "/posters/generated/stark-forge/{w}.avif",
+    "webp": "/posters/generated/stark-forge/{w}.webp",
+    "depth": "/posters/generated/stark-forge/depth.webp",
+    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAwBQCdASoYABQAPu1qq0+ppiOiMBgIATAdiWwAsR7fAcUTWicBf/PalloFsFnkOmMVwAD+7tDO/LByWVyQ23b8QlM+sI1BJ4xSI+0ewGbw19dkRPnn+qY4/0fO3TF3/Qa1k2CW07V4Dk8R/SgyRCDcbpbr8vubUoKQpXBI6AA=",
+    "dominant": "#080808",
+    "mean": "#4c273a",
+    "accent": "hsl(0 70% 50%)",
+    "accentHsl": {
+      "h": 0,
+      "s": 70,
+      "l": 50
+    }
+  },
+  "header-lockup": {
+    "id": "header-lockup",
+    "source": "HEADER IN HOMEPAGE.png",
+    "width": 665,
+    "height": 101,
+    "aspect": 6.5842,
+    "widths": [
+      640,
+      1080,
+      1600,
+      2128
+    ],
+    "avif": "/posters/generated/header-lockup/{w}.avif",
+    "webp": "/posters/generated/header-lockup/{w}.webp",
+    "depth": null,
+    "lqip": "data:image/webp;base64,UklGRs4AAABXRUJQVlA4WAoAAAAQAAAAFwAAAwAAQUxQSFQAAAAFuS5E9D80bttIcqTX9uefptafRg3Wboy/aPsxAcz5ERMQxyd8fbz9rO1sFd3sjcqwO17KZGeZjamAZfQDZJ4dWEgIGTB2JpOLUM5hocAF/5mBWABWUDggVAAAAFADAJ0BKhgABAA+7WSqTimlpCIwCAEwHYlAAAtKzVB5HYmAAP7qfGL1MvhdIlEW3QSct8sBEjSHgGhZ31Q2SOAPLxC/LAleZeRmPlYk0WnrXD3gAA==",
+    "dominant": "#080808",
+    "mean": "#2e3034",
+    "accent": "hsl(0 70% 50%)",
+    "accentHsl": {
+      "h": 0,
+      "s": 70,
+      "l": 50
+    }
+  }
+}
