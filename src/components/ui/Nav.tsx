@@ -7,7 +7,7 @@ import { EVENTS, FEST } from '@/data/events';
 
 const LINKS = [
   { href: '#hero', label: 'Home' },
-  { href: '#events', label: 'Events' },
+  { href: '#brand-new-circuit', label: 'Events' },
   { href: '#team', label: 'Team' },
   { href: '#finale', label: 'Register' },
 ];
@@ -35,7 +35,7 @@ export default function Nav() {
 
   return (
     <>
-      <a href="#events" className="skip-link">
+      <a href="#brand-new-circuit" className="skip-link">
         Skip to events
       </a>
 
@@ -58,7 +58,8 @@ export default function Nav() {
                   href={l.href}
                   className="nav-link"
                   aria-current={
-                    (l.href === '#events' && scene === 'galaxy') ||
+                    (l.href === '#brand-new-circuit' &&
+                      EVENTS.some((e) => e.id === scene)) ||
                     (l.href === '#team' && scene === 'team') ||
                     (l.href === '#finale' && scene === 'finale') ||
                     (l.href === '#hero' && scene === 'hero')

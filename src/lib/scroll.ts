@@ -19,7 +19,6 @@ export type ScrollState = {
 
 export type SceneId =
   | 'hero'
-  | 'galaxy'
   | 'brand-new-circuit'
   | 'daily-bugle'
   | 'brainverse'

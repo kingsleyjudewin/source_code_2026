@@ -48,7 +48,6 @@ const mood = (
 export const SCENE_MOODS: Record<SceneId, SceneMood> = {
   //                    primary    secondary  dens  drift bloom dolly stars
   hero:                mood('#160309', '#24060f', 0.06, 0.25, 0.55, 0, 0.12, '#060406'),
-  galaxy:              mood('#2a6cff', '#c04dff', 0.70, 0.7, 1.00, -1.5),
   'brand-new-circuit': mood('#1f6dff', '#35d0ff', 0.42, 0.35, 0.85, -2.5),
   'daily-bugle':       mood('#c8102e', '#e8e2d4', 0.30, 0.30, 0.70, -2.0),
   brainverse:          mood('#1f7dff', '#00e0ff', 0.55, 0.55, 0.95, -2.2),

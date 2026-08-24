@@ -146,7 +146,7 @@ export default function Hero() {
             <span className="sr-only">(opens in a new tab)</span>
           </a>
 
-          <a href="#events" className="hero-btn hero-btn--ghost">
+          <a href="#brand-new-circuit" className="hero-btn hero-btn--ghost">
             Explore Events
           </a>
         </div>

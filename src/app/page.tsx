@@ -1,11 +1,9 @@
 import CanvasLayer from '@/components/canvas/CanvasLayer';
 import SmoothScroll from '@/components/SmoothScroll';
 import Preloader from '@/components/ui/Preloader';
-import IntroVideo from '@/components/ui/IntroVideo';
 import Nav from '@/components/ui/Nav';
 import Footer from '@/components/ui/Footer';
 import Hero from '@/components/sections/Hero';
-import EventGalaxy from '@/components/sections/EventGalaxy';
 import EventSection from '@/components/sections/EventSection';
 import Team from '@/components/sections/Team';
 import Finale from '@/components/sections/Finale';
@@ -21,7 +19,6 @@ import { EVENTS } from '@/data/events';
 export default function Page() {
   return (
     <>
-      <IntroVideo />
       <Preloader />
       <CanvasLayer />
       <Nav />
@@ -31,18 +28,15 @@ export default function Page() {
           {/* 1 — arrival */}
           <Hero />
 
-          {/* 2 — the map */}
-          <EventGalaxy />
-
-          {/* 3..7 — one universe per event */}
+          {/* 2..6 — one universe per event */}
           {EVENTS.map((event, i) => (
             <EventSection key={event.id} event={event} index={i} />
           ))}
 
-          {/* 8 — the people */}
+          {/* 7 — the people */}
           <Team />
 
-          {/* 9 — convergence */}
+          {/* 8 — convergence */}
           <Finale />
         </main>
 

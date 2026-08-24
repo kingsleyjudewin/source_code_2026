@@ -193,7 +193,7 @@ export default function EventDetails({ event }: { event: SourceEvent }) {
 
       <div className="mt-6 flex flex-wrap items-start gap-4">
         <RegisterButton />
-        <a href="#events" className="btn-ghost">
+        <a href="#brand-new-circuit" className="btn-ghost">
           All Events
         </a>
       </div>
