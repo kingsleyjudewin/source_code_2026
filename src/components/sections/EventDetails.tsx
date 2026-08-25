@@ -38,6 +38,14 @@ function UsersIcon() {
     </svg>
   );
 }
+function LaptopIcon() {
+  return (
+    <svg viewBox="0 0 24 24" {...ico} aria-hidden="true">
+      <rect x="4" y="5" width="16" height="11" rx="1.8" />
+      <path d="M2.5 19.5h19" />
+    </svg>
+  );
+}
 function PhoneIcon() {
   return (
     <svg viewBox="0 0 24 24" {...ico} aria-hidden="true">
@@ -128,6 +136,9 @@ export default function EventDetails({ event }: { event: SourceEvent }) {
           note={event.venueNote}
         />
         <InfoRow icon={<UsersIcon />} label="Team Size" value={event.teamSize} />
+        {event.instructions && (
+          <InfoRow icon={<LaptopIcon />} label="Instructions" value={event.instructions} />
+        )}
 
         {/* Coordinators — expandable on mobile, always open from sm up. */}
         <div className={`info-row info-coords ${open ? 'is-open' : ''}`}>

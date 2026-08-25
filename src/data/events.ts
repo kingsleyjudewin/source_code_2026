@@ -50,6 +50,8 @@ export type SourceEvent = {
   closingLine?: string;
   /** Optional supporting line beneath the closing line. */
   closingSub?: string;
+  /** Optional participant instruction, shown as a row on the information card. */
+  instructions?: string;
   date: string;
   venue: string;
   /** Secondary venue note, e.g. a starting point. */
@@ -97,9 +99,10 @@ export const EVENTS: SourceEvent[] = [
     date: '28 August 2026',
     venue: 'Room 241, 2nd Floor, 2nd Block',
     category: 'Technical Event',
-    teamSize: '1–4 Members',
+    instructions: 'Bring laptops with WiFi configured, or a strong hotspot.',
+    teamSize: '2–4 Members',
     coordinators: [
-      { name: 'Lourds Xavier', phone: '8095765526' },
+      { name: 'Lourdes Xavier', phone: '8095765526' },
       { name: 'Jayani', phone: '8148311354' },
     ],
     registerUrl: REGISTER_URL,
