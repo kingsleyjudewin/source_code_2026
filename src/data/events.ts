@@ -52,6 +52,11 @@ export type SourceEvent = {
   closingSub?: string;
   /** Optional participant instruction, shown as a row on the information card. */
   instructions?: string;
+  /**
+   * Marks the event as concluded. The card renders its poster grayscale with a
+   * "Completed" stamp, strikes through the title, and disables registration.
+   */
+  completed?: boolean;
   date: string;
   venue: string;
   /** Secondary venue note, e.g. a starting point. */
@@ -99,6 +104,7 @@ export const EVENTS: SourceEvent[] = [
     date: '28 August 2026',
     venue: 'Room 241, 2nd Floor, 2nd Block',
     category: 'Technical Event',
+    completed: true,
     instructions: 'Bring laptops with WiFi configured, or a strong hotspot.',
     teamSize: '2–4 Members',
     coordinators: [
@@ -124,8 +130,8 @@ export const EVENTS: SourceEvent[] = [
       { label: 'Round 3', title: 'Mystery Live Challenge' },
     ],
     closingLine: 'See Differently. Frame Boldly. Tell The Story.',
-    date: '29 August 2026 · 4:00 PM',
-    venue: 'Block 2, Floor 2, Room 238',
+    date: '31 August 2026 · 4:00 PM',
+    venue: 'Online',
     category: 'Photography · Visual Storytelling',
     teamSize: 'Individual Event',
     coordinators: [
@@ -172,7 +178,7 @@ export const EVENTS: SourceEvent[] = [
     category: 'Quiz · General & Technical',
     teamSize: '1–3 Members',
     coordinators: [
-      { name: 'Thanusarvesh', phone: '9443745725' },
+      { name: 'Tanusarvesh', phone: '9443745725' },
       { name: 'Nysa', phone: '7259597421' },
     ],
     registerUrl: REGISTER_URL,

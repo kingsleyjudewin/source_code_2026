@@ -46,6 +46,14 @@ function LaptopIcon() {
     </svg>
   );
 }
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" {...ico} aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="m8 12.5 2.7 2.7L16.5 9" />
+    </svg>
+  );
+}
 function PhoneIcon() {
   return (
     <svg viewBox="0 0 24 24" {...ico} aria-hidden="true">
@@ -97,19 +105,32 @@ export default function EventDetails({ event }: { event: SourceEvent }) {
   return (
     <div className="glass glass-rim relative rounded-3xl p-6 sm:p-7 lg:p-8" data-reveal="panel">
       {/* Category chip */}
-      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--section-accent)_35%,transparent)] bg-[color-mix(in_oklab,var(--section-accent)_10%,transparent)] px-3.5 py-1.5">
-        <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--section-accent)] opacity-70" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--section-accent)]" />
-        </span>
-        <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-[var(--section-accent)]">
-          {event.category}
-        </span>
-      </div>
+      {event.completed ? (
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5">
+          <span className="h-3 w-3 text-white/70">
+            <CheckIcon />
+          </span>
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-white/70">
+            Event Completed
+          </span>
+        </div>
+      ) : (
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--section-accent)_35%,transparent)] bg-[color-mix(in_oklab,var(--section-accent)_10%,transparent)] px-3.5 py-1.5">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--section-accent)] opacity-70" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--section-accent)]" />
+          </span>
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-[var(--section-accent)]">
+            {event.category}
+          </span>
+        </div>
+      )}
 
       {/* 1 — Event name */}
       <h3 className="display text-glow text-4xl leading-[0.95] sm:text-5xl">
-        <span className="text-metal">{event.name}</span>
+        <span className={`text-metal ${event.completed ? 'text-metal--completed' : ''}`}>
+          {event.name}
+        </span>
       </h3>
 
       {/* 2 — Tagline */}
@@ -203,7 +224,13 @@ export default function EventDetails({ event }: { event: SourceEvent }) {
       )}
 
       <div className="mt-6 flex flex-wrap items-start gap-4">
-        <RegisterButton />
+        {event.completed ? (
+          <span className="btn-ghost btn-completed" aria-disabled="true">
+            Event Completed
+          </span>
+        ) : (
+          <RegisterButton />
+        )}
         <a href="#brand-new-circuit" className="btn-ghost">
           All Events
         </a>

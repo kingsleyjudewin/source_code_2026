@@ -196,11 +196,19 @@ export default function EventSection({
               <span className="h-px w-10 bg-[var(--section-accent)]" />
               Event 0{index + 1} — {event.universe.replace('-', ' ')}
             </div>
-            <PosterFrame
-              poster={event.poster}
-              alt={`${event.name} — official event poster`}
-              priority={index === 0}
-            />
+            <div className="relative">
+              <PosterFrame
+                poster={event.poster}
+                alt={`${event.name} — official event poster`}
+                priority={index === 0}
+                className={event.completed ? 'poster-frame--completed' : ''}
+              />
+              {event.completed && (
+                <span className="completed-stamp" aria-hidden="true">
+                  Completed
+                </span>
+              )}
+            </div>
           </div>
 
           {/* CONTENT — 45% */}

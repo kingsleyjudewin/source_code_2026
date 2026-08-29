@@ -1953,3 +1953,66 @@ body {
     display: none;
   }
 }
+
+/* ============================================================================
+   COMPLETED EVENT TREATMENT
+   Applied only when an event's data sets `completed: true` — see events.ts.
+   Every rule here is additive: an event with no completed flag renders exactly
+   as it did before this block existed.
+   ========================================================================= */
+
+/* Desaturates the poster card as one unit — image, glow, holographic sheen and
+   reflection all go gray together, since `filter` on the outer element affects
+   the whole rendered subtree regardless of how those effects are produced. */
+.poster-frame--completed {
+  filter: grayscale(1) contrast(0.92) brightness(0.85);
+}
+
+/* Corner stamp. Sits outside the filtered element (a sibling in the wrapping
+   div), so it stays crisp white against the grayscale card rather than being
+   desaturated itself. */
+.completed-stamp {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  z-index: 20;
+  padding: 0.4rem 1rem;
+  border: 2px solid rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+  rotate: -8deg;
+  background: rgb(0 0 0 / 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.85);
+  text-shadow: 0 0 10px rgb(255 255 255 / 0.35);
+  pointer-events: none;
+}
+
+/* Strikethrough on the title. The gradient fill clips to transparent
+   (-webkit-text-fill-color), so the decoration line needs an explicit colour —
+   currentColor would inherit that same transparency and the line would never
+   render. Also dims and desaturates the metallic gradient itself. */
+.text-metal--completed {
+  text-decoration: line-through;
+  text-decoration-color: rgb(255 255 255 / 0.6);
+  text-decoration-thickness: 0.07em;
+  filter: grayscale(1) brightness(0.8);
+}
+
+/* Register CTA replaced with an inert label. Compound selector (two classes)
+   so it outranks the shared .btn-ghost:hover accent-glow rule without needing
+   !important — the base .btn-ghost colours are already neutral, so only the
+   hover state needs suppressing. */
+.btn-ghost.btn-completed,
+.btn-ghost.btn-completed:hover {
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: var(--color-silver);
+  border-color: color-mix(in oklab, var(--color-holo) 18%, transparent);
+  background: color-mix(in oklab, var(--color-holo) 4%, transparent);
+}
